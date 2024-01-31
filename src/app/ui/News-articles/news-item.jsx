@@ -1,12 +1,18 @@
-"use client"
+"use client";
 import "./news-item.css";
 import Link from "next/link";
+import axios from "axios";
 import { dateDifference } from "./../../lib/dateDifference";
+import { authHeader } from "../../lib/services/auth";
 
 export default function NewsItem({ key, data, index }) {
-  const hideTheData = async()=>{
-
-  }
+  const hideTheData = async () => {
+    try {
+      const res = await axios.post(`/api/hide?newsId=${data?.hackerId}`, {
+        headers: authHeader(),
+      });
+    } catch (err) {}
+  };
   return (
     <>
       <tr className="text-lg news-item">
@@ -25,7 +31,8 @@ export default function NewsItem({ key, data, index }) {
             <span title={data?.postedOn}>
               {dateDifference(new Date(), data.postedOn)}
             </span>{" "}
-            | <span onClick={hideTheData}>Hide</span> | <span>{data?.comments} comments</span>
+            | <span onClick={hideTheData}>Hide</span> |{" "}
+            <span>{data?.comments} comments</span>
           </p>
         </td>
       </tr>

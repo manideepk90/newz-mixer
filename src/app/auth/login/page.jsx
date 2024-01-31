@@ -17,7 +17,6 @@ export default function Page({ children }) {
       if (email.trim() && password.trim()) {
         const res = await login({ email, password });
         if (res?.data) {
-          console.log(res?.data);
           localStorage.setItem("token", res?.data?.token);
           localStorage.setItem("email", res?.data?.email);
           setTimeout(() => loginAuth(res?.data), 500);
