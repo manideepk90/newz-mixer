@@ -61,6 +61,7 @@ async function handler(req: any, res: NextApiResponse) {
         select: {
           isRead: true,
         },
+        take : 1
       },
     },
   });

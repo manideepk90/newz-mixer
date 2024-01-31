@@ -26,6 +26,9 @@ export default function NewsItem({ key, data, index }) {
           headers: authHeader(),
         }
       );
+      if(res.data.isRead){
+        // update ui
+      }
     } catch (err) {}
   };
   return (
@@ -38,7 +41,7 @@ export default function NewsItem({ key, data, index }) {
         <Link href={data?.url}>{data?.title} </Link>
         <span className="text-zinc-600 text-sm">({data?.site})</span>
         <span onClick={markAsRead} className="text-zinc-600 text-sm cursor-pointer">
-          {data?.UserActions?.isRead ? "Mark As unread" : "Mark As read"} 
+          {data?.UserActions[0]?.isRead ? "Mark As unread" : "Mark As read"} 
         </span>
       </tr>
       <tr>
