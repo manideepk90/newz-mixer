@@ -27,8 +27,10 @@ async function handler(req: any, res: NextApiResponse) {
         isRead: true,
       },
     });
+    res.status(201).json({ isRead: true });
   } catch (err) {
     console.log(err);
+    res.status(201).json({ error: "failed to mark as read" });
   }
 }
 export default WithAuth(handler);
