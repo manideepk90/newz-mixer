@@ -20,7 +20,7 @@ export default function NewsItem({ key, data, index }) {
   const markAsRead = async () => {
     try {
       const res = await axios.post(
-        `/api/hide?markAsRead=${data?.hackerId}`,
+        `/api/markAsRead?newsId=${data?.hackerId}`,
         {},
         {
           headers: authHeader(),
