@@ -1,0 +1,27 @@
+.auth-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 100px);
+  flex-direction: column;
+}
+.links {
+  padding: 2px 5px;
+  border: 1px solid #205;
+  border-radius: 4px;
+}
+.auth-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+  align-items: center;
+}
+.error-box {
+  width: 100%;
+  display: flex;
+  padding: 10px;
+  background-color: rgba(255, 0, 0, 0.6);
+  color: white;
+  border-radius: 3px;
+}

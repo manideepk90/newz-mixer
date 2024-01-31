@@ -1,0 +1,39 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+model User {
+  id          String        @id @default(uuid())
+  email       String
+  password    String
+  UserActions UserActions[]
+}
+
+model NewsArticle {
+  hackerId    String        @id
+  title       String
+  rank        String
+  url         String
+  site        String
+  postedOn    DateTime
+  upvotes     Int
+  comments    Int
+  user        String
+  UserActions UserActions[]
+}
+
+model UserActions {
+  id            String      @id @default(uuid())
+  isRead        Boolean     @default(false)
+  isHidden      Boolean     @default(false)
+  newsArticleId String
+  userId        String
+  User          User        @relation(fields: [userId], references: [id])
+  NewsArticle   NewsArticle @relation(fields: [newsArticleId], references: [hackerId])
+}
