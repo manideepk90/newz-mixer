@@ -8,7 +8,7 @@ import { authHeader } from "../../lib/services/auth";
 export default function NewsItem({ key, data, index }) {
   const hideTheData = async () => {
     try {
-      const res = await axios.post(`/api/hide?newsId=${data?.hackerId}`, {
+      const res = await axios.post(`/api/hide?newsId=${data?.hackerId}`,{}, {
         headers: authHeader(),
       });
     } catch (err) {}

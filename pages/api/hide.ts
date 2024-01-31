@@ -27,8 +27,10 @@ async function handler(req: any, res: NextApiResponse) {
         isHidden: true,
       },
     });
+    res.status(201).json({ hidden: true });
   } catch (err) {
     console.log(err);
+    res.status(400).json({ error: "failed to hide" });
   }
 }
 

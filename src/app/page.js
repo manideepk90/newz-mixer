@@ -20,7 +20,6 @@ export default function Home() {
     const fetchData = async () => {
       setLoading(true);
       try {
-        console.log(authHeader());
         const res = await axios.get(`/api/articles?p=${page}`, {
           headers: authHeader(),
         });
