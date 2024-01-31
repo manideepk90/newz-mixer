@@ -8,9 +8,24 @@ import { authHeader } from "../../lib/services/auth";
 export default function NewsItem({ key, data, index }) {
   const hideTheData = async () => {
     try {
-      const res = await axios.post(`/api/hide?newsId=${data?.hackerId}`,{}, {
-        headers: authHeader(),
-      });
+      const res = await axios.post(
+        `/api/hide?newsId=${data?.hackerId}`,
+        {},
+        {
+          headers: authHeader(),
+        }
+      );
+    } catch (err) {}
+  };
+  const markAsRead = async () => {
+    try {
+      const res = await axios.post(
+        `/api/hide?markAsRead=${data?.hackerId}`,
+        {},
+        {
+          headers: authHeader(),
+        }
+      );
     } catch (err) {}
   };
   return (
@@ -22,6 +37,9 @@ export default function NewsItem({ key, data, index }) {
         </td>
         <Link href={data?.url}>{data?.title} </Link>
         <span className="text-zinc-600 text-sm">({data?.site})</span>
+        <span onClick={markAsRead} className="text-zinc-600 text-sm">
+          {data?.UserActions?.isRead ? "Mark As unread" : "Mark As read"} 
+        </span>
       </tr>
       <tr>
         <td colSpan="2"></td>

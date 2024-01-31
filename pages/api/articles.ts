@@ -56,6 +56,13 @@ async function handler(req: any, res: NextApiResponse) {
     orderBy: {
       postedOn: "desc",
     },
+    include: {
+      UserActions: {
+        select: {
+          isRead: true,
+        },
+      },
+    },
   });
   if (data) res.status(200).json({ data: data });
   else {
