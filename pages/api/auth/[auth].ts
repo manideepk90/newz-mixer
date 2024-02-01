@@ -8,44 +8,52 @@ export default async function handler(
 ) {
   const { auth } = req.query;
   const { body } = req;
-  switch (req.method) {
-    case "POST":
-      if (auth === "login") {
+  
+switch (req.method) {
+  case "POST":
+    if (auth === "login") {
+      try {
         const user = await prisma.user.findFirst({
           where: {
             email: body?.email,
           },
         });
-        if (!user) res.status(403).json({ error: "No user found" });
+
+        if (!user) return res.status(403).json({ error: "No user found" });
+
         if (await comparePasswords(body?.password, user?.password)) {
           const payload = {
-            id: user?.id,
+            id: user.id,
           };
-          try {
-            const token = jwt.sign(payload, process.env.ACCESS_KEY_TOKEN, {
-              expiresIn: 215451,
-            });
 
-            res.status(200).json({
-              success: true,
-              token: "Bearer " + token,
-              email: user?.email,
-            });
-          } catch (err) {
-            res.status(400).json({
-              success: false,
-            });
-          }
+          const token = jwt.sign(payload, process.env.ACCESS_KEY_TOKEN, {
+            expiresIn: 215451,
+          });
+
+          return res.status(200).json({
+            success: true,
+            token: "Bearer " + token,
+            email: user.email,
+          });
+        } else {
+          return res.status(403).json({ error: "Invalid Credentials" });
         }
-        res.status(403).json({ error: "Invalid Credentials" });
-      } else if (auth === "signup") {
+      } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+    } else if (auth === "signup") {
+      try {
         const user = await prisma.user.findFirst({
           where: {
             email: body?.email,
           },
         });
-        if (user)
-          res.status(400).json({ error: "User already exists! please login" });
+
+        if (user) {
+          return res.status(400).json({ error: "User already exists! Please login" });
+        }
+
         if (body?.password?.length >= 8) {
           const data = await prisma.user.create({
             data: {
@@ -53,33 +61,36 @@ export default async function handler(
               password: await hashPassword(body?.password),
             },
           });
+
           if (data) {
             const payload = {
-              id: data?.id,
+              id: data.id,
             };
-            try {
-              const token = jwt.sign(payload, process.env.ACCESS_KEY_TOKEN, {
-                expiresIn: 215451,
-              });
 
-              res.status(200).json({
-                success: true,
-                token: "Bearer " + token,
-                email: data?.email,
-              });
-            } catch (err) {
-              res.status(400).json({
-                success: false,
-              });
-            }
+            const token = jwt.sign(payload, process.env.ACCESS_KEY_TOKEN, {
+              expiresIn: 215451,
+            });
+
+            return res.status(200).json({
+              success: true,
+              token: "Bearer " + token,
+              email: data.email,
+            });
+          } else {
+            return res.status(500).json({ error: "Failed to create user" });
           }
-          res.status(400).json({ error: "failed to create user" });
+        } else {
+          return res.status(400).json({ error: "Enter a valid password (at least 8 characters)" });
         }
-        res.status(400).json({ error: "Enter valid Password" });
+      } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: "Internal Server Error" });
       }
-      res.status(400).json({ error: "No Api" });
-      break;
-    default:
-      res.status(400).json({ error: "API Is not available" });
-  }
+    } else {
+      return res.status(400).json({ error: "No Api" });
+    }
+    break;
+  default:
+    return res.status(400).json({ error: "API is not available" });
+}
 }
