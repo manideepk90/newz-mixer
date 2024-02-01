@@ -5,7 +5,7 @@ import axios from "axios";
 import { dateDifference } from "./../../lib/dateDifference";
 import { authHeader } from "../../lib/services/auth";
 
-export default function NewsItem({ key, data, index }) {
+export default function NewsItem({ key, data, index, deleteData, markRead }) {
   const hideTheData = async () => {
     try {
       const res = await axios.post(
@@ -15,6 +15,9 @@ export default function NewsItem({ key, data, index }) {
           headers: authHeader(),
         }
       );
+      if (res.data) {
+        deleteData(data?.hackerId);
+      }
     } catch (err) {}
   };
   const markAsRead = async () => {
@@ -26,8 +29,8 @@ export default function NewsItem({ key, data, index }) {
           headers: authHeader(),
         }
       );
-      if(res.data.isRead){
-        // update ui
+      if (res.data.isRead) {
+        markRead(data?.hackerId);
       }
     } catch (err) {}
   };
@@ -40,8 +43,11 @@ export default function NewsItem({ key, data, index }) {
         </td>
         <Link href={data?.url}>{data?.title} </Link>
         <span className="text-zinc-600 text-sm">({data?.site})</span>
-        <span onClick={markAsRead} className="text-zinc-600 text-sm cursor-pointer">
-          {data?.UserActions[0]?.isRead ? "Mark As unread" : "Mark As read"} 
+        <span
+          onClick={markAsRead}
+          className="text-zinc-600 text-sm cursor-pointer"
+        >
+          {data?.UserActions[0]?.isRead ? "Mark As unread" : "Mark As read"}
         </span>
       </tr>
       <tr>
@@ -52,8 +58,11 @@ export default function NewsItem({ key, data, index }) {
             <span title={data?.postedOn}>
               {dateDifference(new Date(), data.postedOn)}
             </span>{" "}
-            | <span onClick={hideTheData} className="cursor-pointer">Hide</span> |{" "}
-            <span>{data?.comments} comments</span>
+            |{" "}
+            <span onClick={hideTheData} className="cursor-pointer">
+              Hide
+            </span>{" "}
+            | <span>{data?.comments} comments</span>
           </p>
         </td>
       </tr>

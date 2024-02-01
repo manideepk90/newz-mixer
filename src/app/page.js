@@ -11,6 +11,26 @@ library.add(fas);
 import { authHeader } from "./lib/services/auth";
 export default function Home() {
   const [data, setData] = useState([]);
+
+  const deleteData = (id) => {
+    const modifiedData = data.filter((e) => e.hackerId !== id);
+    setData(modifiedData);
+  };
+  const markAsRead = (id) => {
+    const modifiedData = data.map((e) => {
+      if (e.hackerId === id) {
+        return {
+          ...e,
+          UserActions: [
+            {
+              isRead: !e?.UserActions[0]?.isRead,
+            },
+          ],
+        };
+      } else return e;
+    });
+  };
+
   const page = useSearchParams().get("p");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -58,7 +78,13 @@ export default function Home() {
         <tbody>
           {data &&
             data.map((ele, index) => (
-              <NewsItem data={ele} key={index} index={index + 1} />
+              <NewsItem
+                data={ele}
+                key={index}
+                markRead={markAsRead}
+                index={index + 1}
+                deleteData={deleteData}
+              />
             ))}
         </tbody>
       </table>
