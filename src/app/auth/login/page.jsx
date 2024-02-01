@@ -3,7 +3,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { login } from "./../../lib/services/auth";
 import { useAuth } from "./../../lib/authContext";
-export default function Page({ children }) {
+export default function Page({ }) {
   const [email, setEmail] = useState("");
   const [password, setPassWord] = useState("");
   const [error, setError] = useState("");
