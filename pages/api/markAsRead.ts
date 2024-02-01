@@ -11,8 +11,8 @@ async function handler(req: any, res: NextApiResponse) {
         newsArticleId: newsId,
       },
     });
-    if (exist)
-      await prisma.userActions.update({
+    if (exist) {
+      const result = await prisma.userActions.update({
         where: {
           id: exist.id,
         },
@@ -20,6 +20,8 @@ async function handler(req: any, res: NextApiResponse) {
           isRead: !exist.isRead,
         },
       });
+      return res.status(201).json({ isRead: result.isRead });
+    }
     await prisma.userActions.create({
       data: {
         userId: req?.user?.id,

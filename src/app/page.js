@@ -29,6 +29,7 @@ export default function Home() {
         };
       } else return e;
     });
+    setData(modifiedData);
   };
 
   const page = useSearchParams().get("p");

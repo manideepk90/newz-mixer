@@ -29,7 +29,8 @@ export default function NewsItem({ key, data, index, deleteData, markRead }) {
           headers: authHeader(),
         }
       );
-      if (res.data.isRead) {
+      if (res.data) {
+
         markRead(data?.hackerId);
       }
     } catch (err) {}
@@ -45,9 +46,9 @@ export default function NewsItem({ key, data, index, deleteData, markRead }) {
         <span className="text-zinc-600 text-sm">({data?.site})</span>
         <span
           onClick={markAsRead}
-          className="text-zinc-600 text-sm cursor-pointer"
+          className="text-sm cursor-pointer"
         >
-          {data?.UserActions[0]?.isRead ? "Mark As unread" : "Mark As read"}
+          {" "}{data?.UserActions[0]?.isRead ? "Mark As unread" : "Mark As read"}
         </span>
       </tr>
       <tr>
