@@ -55,7 +55,7 @@ export default async function handler(
           });
           if (data) {
             const payload = {
-              id: user?.id,
+              id: data?.id,
             };
             try {
               const token = jwt.sign(payload, process.env.ACCESS_KEY_TOKEN, {
@@ -65,7 +65,7 @@ export default async function handler(
               res.status(200).json({
                 success: true,
                 token: "Bearer " + token,
-                email: user?.email,
+                email: data?.email,
               });
             } catch (err) {
               res.status(400).json({
